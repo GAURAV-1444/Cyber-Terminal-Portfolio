@@ -61,7 +61,7 @@ export const projectsData = [
         repoName: "Cyber_Terminal_Portfolio",
         tech: ["React.js", "CSS3", "JavaScript"],
         description: "An immersive, developer-focused cyberpunk terminal portfolio featuring live system diagnostics, responsive layouts, and interactive command-line components.",
-        github: "https://github.com/GAURAV-1444/your-repo-name"
+        github: "https://github.com/GAURAV-1444/Cyber-Terminal-Portfolio"
     }
 ];
 

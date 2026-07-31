@@ -5,7 +5,6 @@
 ![Vite](https://img.shields.io/badge/Vite-7-646CFF?style=for-the-badge&logo=vite)
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
 [![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Visit_Portfolio-00FF88?style=for-the-badge)](https://cyber-terminal-portfolio-beta.vercel.app/)
 
