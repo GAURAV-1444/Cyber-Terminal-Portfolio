@@ -1,5 +1,15 @@
 # ⚡ Cyber Terminal Portfolio
 
+
+![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react)
+![Vite](https://img.shields.io/badge/Vite-7-646CFF?style=for-the-badge&logo=vite)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Visit_Portfolio-00FF88?style=for-the-badge)](https://cyber-terminal-portfolio-beta.vercel.app/)
+
+
 A modern **Cyber Terminal-inspired Developer Portfolio** built with **React.js** and **Vite**. The portfolio combines a terminal-inspired interface with a clean, responsive design to showcase projects, technical skills, education, certifications, and professional experience.
 
 
@@ -7,33 +17,29 @@ A modern **Cyber Terminal-inspired Developer Portfolio** built with **React.js**
 
 ## 🚀 Features
 
-- 💻 Cyber Terminal-inspired UI
-- 🎨 Modern dark theme with glowing effects
-- ⚡ Smooth scrolling navigation
-- 📱 Fully responsive design
-- ⌨️ Animated typing effect
-- 📂 Project showcase with GitHub links
-- 🛠️ Skills categorized by technology
-- 🎓 Education & certifications section
-- 📄 Resume download
+- 💻 Cyber Terminal-inspired user interface
+- ⚡ Smooth scroll navigation
+- ⌨️ Terminal-style typing animations
+- 📱 Fully responsive across desktop, tablet, and mobile
+- 📂 Interactive project showcase
+- 🛠️ Categorized technical skills
+- 🎓 Education & certification timeline
+- 📄 One-click resume download
 - 📞 Contact section with social links
+- 🌌 Animated Matrix-style background
+- 📊 System status panel with diagnostics
 
 ---
 
 ## 🛠️ Tech Stack
 
-### Frontend
 - React.js
 - JavaScript (ES6+)
 - HTML5
 - CSS3
-
-### Libraries
+- Vite
 - React Icons
 - React Type Animation
-
-### Build Tool
-- Vite
 
 ---
 
@@ -107,9 +113,9 @@ npm run dev
 
 The application will be available at:
 
-```
-http://localhost:5173
-```
+**Local:** http://localhost:5173
+
+**Production:** https://cyber-terminal-portfolio-beta.vercel.app/
 
 ---
 
@@ -121,16 +127,38 @@ npm run build
 
 ---
 
+## 🌐 Live Demo
+
+Visit the live portfolio:
+
+🔗 https://cyber-terminal-portfolio-beta.vercel.app/
+
+---
+
+## 🚀 Future Enhancements
+
+- Interactive terminal command input
+- Theme switcher (Green / Blue / Amber)
+- Visitor analytics dashboard
+- Blog section
+- Multi-language support
+- Accessibility improvements
+
+---
+
 ## 👨‍💻 Author
 
 **Gaurav Kshirsagar**
 
-- GitHub: https://github.com/GAURAV-1444
-- Email: gauravmanojkshirsagar333@gmail.com
+📧 Email: gauravmanojkshirsagar333@gmail.com
+
+💻 GitHub: https://github.com/GAURAV-1444
+
+🌐 Portfolio: https://cyber-terminal-portfolio-beta.vercel.app/
 
 
 ---
 
-## ⭐ Support
+⭐ If you found this project interesting, consider giving it a star on GitHub.
 
-If you like this project, consider giving it a **⭐ Star** on GitHub.
+Built with ❤️ by Gaurav Kshirsagar.
