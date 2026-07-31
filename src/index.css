@@ -1,0 +1,1508 @@
+/* ==========================================
+   0. FONTS & ROOT VARIABLES
+   ========================================== */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+:root {
+  --bg-color: #05080F;
+  --card-bg: #0B1220;
+  --green-main: #00FF88;
+  --green-dim: rgba(0, 255, 136, 0.15);
+  --text-main: #E6F1FF;
+  --text-muted: #6B7280;
+}
+
+#root {
+  background: radial-gradient(circle at 50% 0%, rgba(0, 255, 136, 0.1) 0%, transparent 60%);
+  min-height: 100vh;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-color);
+  background-image: 
+    linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  color: var(--text-main);
+  font-family: 'JetBrains Mono', monospace;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* Custom Terminal Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--card-bg);
+  border: 1px solid var(--green-main);
+  border-radius: 4px;
+}
+
+
+/* ==========================================
+   1. GLOBAL LAYOUTS, TOKENS & TYPOGRAPHY
+   ========================================== */
+.terminal-container {
+  padding: 7rem 2rem 4rem 2rem; 
+  max-width: 1000px; 
+  margin: 0 auto;
+  scroll-margin-top: 5rem;
+}
+
+.prompt::before {
+  content: "$ ";
+  color: var(--green-main);
+  font-weight: bold;
+}
+
+.glow-text {
+  color: var(--green-main);
+  text-shadow: 0 0 8px var(--green-dim);
+}
+
+.terminal-block {
+  background: rgba(11, 18, 32, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  border-left: 2px solid var(--green-main);
+  padding: 2.5rem 1.5rem 1.5rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  position: relative;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.terminal-block:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 255, 136, 0.6);
+  box-shadow: 0 15px 35px rgba(0, 255, 136, 0.15);
+}
+
+/* Mac-style Window Dots header control */
+.terminal-block::before {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ff5f56;
+  box-shadow: 20px 0 0 #ffbd2e, 40px 0 0 #27c93f;
+}
+
+/* Blinking Cursor */
+.custom-cursor {
+  display: inline-block;
+  width: 12px;
+  height: 1.2em;
+  background-color: var(--green-main);
+  animation: blink 1s step-end infinite;
+  vertical-align: text-bottom;
+  margin-left: 5px;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+
+/* ==========================================
+   2. REUSABLE BUTTONS, TAGS & FORM INPUTS
+   ========================================== */
+.btn-terminal {
+  background: rgba(0, 255, 136, 0.05);
+  color: var(--green-main);
+  border: 1px solid var(--green-main);
+  padding: 0.8rem 1.5rem;
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 4px;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.btn-terminal:hover {
+  background: var(--green-main);
+  color: var(--bg-color);
+  box-shadow: 0 0 15px var(--green-dim);
+}
+
+.terminal-tab-btn {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  transition: all 0.25s ease;
+  cursor: pointer;
+  font-family: inherit;
+  border-radius: 4px;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.8rem;
+}
+
+.terminal-tab-btn:hover {
+  background: rgba(0, 255, 136, 0.1);
+  color: var(--green-main);
+  border-color: var(--green-main);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
+  transform: translateY(-2px);
+}
+
+.terminal-tab-btn.active {
+  background: rgba(0, 255, 136, 0.15);
+  color: var(--green-main);
+  border-color: var(--green-main);
+  box-shadow: 0 0 12px var(--green-dim);
+}
+
+.tech-tag {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  color: var(--text-main);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+}
+
+.tech-tag:hover {
+  border-color: var(--green-main);
+  color: var(--green-main);
+}
+
+.skill-tag {
+  background: rgba(0, 255, 136, 0.05);
+  color: var(--green-main);
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  transition: all 0.2s ease;
+}
+
+.skill-tag:hover {
+  background: var(--green-main);
+  color: var(--bg-color);
+  box-shadow: 0 0 10px var(--green-dim);
+  transform: scale(1.05);
+}
+
+.terminal-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--text-muted);
+  color: var(--text-main);
+  font-family: 'JetBrains Mono', monospace;
+  outline: none;
+  width: 100%;
+  padding: 8px 5px;
+  transition: border-color 0.3s ease;
+}
+
+.terminal-input:focus {
+  border-bottom: 1px solid var(--green-main);
+}
+
+.terminal-textarea {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--text-muted);
+  color: var(--text-main);
+  font-family: 'JetBrains Mono', monospace;
+  outline: none;
+  width: 100%;
+  padding: 10px;
+  resize: vertical;
+  transition: border-color 0.3s ease;
+  border-radius: 4px;
+}
+
+.terminal-textarea:focus {
+  border: 1px solid var(--green-main);
+}
+
+
+/* ==========================================
+   3. NAVBAR COMPONENT SPECIFICATION
+   ========================================== */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 3rem;
+  background: rgba(5, 8, 15, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+  z-index: 100;
+  box-sizing: border-box;
+}
+
+.nav-brand {
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  color: var(--green-main);
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.2s ease;
+  position: relative;
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
+}
+
+.nav-links a:hover {
+  color: var(--green-main);
+}
+
+.nav-links a:hover::after,
+.nav-links a.active-link::after {
+  content: "_";
+  position: absolute;
+  right: -8px;
+  animation: blink 1s step-end infinite;
+}
+
+.nav-links a.active-link {
+  color: var(--green-main);
+  text-shadow: 0 0 8px var(--green-dim);
+  background: rgba(0, 255, 136, 0.08);
+}
+
+
+/* ==========================================
+   4. HOME COMPONENT SPECIFICATION
+   ========================================== */
+.home-title {
+  font-size: 2.8rem;
+  margin: 0.5rem 0;
+  letter-spacing: -1px;
+  color: var(--text-main);
+}
+
+.home-role-container {
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  margin-top: 1rem;
+}
+
+.home-resume-wrapper {
+  margin-top: 2.5rem;
+}
+
+.home-resume-btn {
+  display: inline-block;
+  text-decoration: none;
+}
+
+
+/* ==========================================
+   5. SYSTEM STATUS COMPONENT SPECIFICATION
+   ========================================== */
+.sys-container {
+  padding-top: 1.5rem;
+  padding-bottom: 1rem;
+}
+
+.sys-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(0, 255, 136, 0.15);
+  padding-bottom: 0.8rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.sys-card {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 255, 136, 0.1);
+}
+
+.sys-card-label {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.sys-card-value {
+  color: var(--green-main);
+  font-size: 1rem;
+  font-weight: bold;
+  margin-top: 0.3rem;
+}
+
+.sys-footer-strip {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  border-top: 1px solid rgba(0, 255, 136, 0.1);
+  padding-top: 1rem;
+}
+
+.sys-footer-text {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.sys-cta-btn {
+  font-size: 0.8rem;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+}
+
+
+/* ==========================================
+   6. ABOUT (INTERACTIVE SHELL) COMPONENT SPECIFICATION
+   ========================================== */
+.about-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.about-chips-container {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.about-chip-btn {
+  font-size: 0.7rem;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+}
+
+.about-status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+  border-bottom: 1px solid rgba(0, 255, 136, 0.15);
+  padding-bottom: 0.8rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.about-terminal-screen {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 1.2rem;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  font-family: monospace;
+  font-size: 0.9rem;
+  min-height: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  scroll-behavior: smooth;
+}
+
+.about-output-line {
+  line-height: 1.5;
+  white-space: pre-line;
+}
+
+.about-output-system {
+  color: var(--text-muted);
+}
+
+.about-output-command {
+  color: var(--green-main);
+  font-weight: bold;
+}
+
+.about-output-response {
+  color: var(--text-main);
+  display: block;
+  margin-top: 0.2rem;
+}
+
+.about-input-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 0.7rem 1rem;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  font-family: monospace;
+}
+
+.about-input-prompt {
+  color: var(--green-main);
+  font-weight: bold;
+}
+
+.about-command-input {
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  outline: none;
+  width: 100%;
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+.about-footer-bar {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 255, 136, 0.15);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.about-footer-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.about-footer-dot {
+  height: 7px;
+  width: 7px;
+  min-width: 7px;
+  min-height: 7px;
+  background-color: var(--green-main);
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 6px var(--green-main);
+  flex-shrink: 0;
+}
+
+
+/* ==========================================
+   7. SKILLS COMPONENT SPECIFICATION
+   ========================================== */
+.skills-search-box {
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  border-radius: 4px;
+  padding: 0.4rem 0.8rem;
+  gap: 8px;
+}
+
+.skills-search-input {
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  outline: none;
+  font-size: 0.85rem;
+  font-family: monospace;
+  width: 130px;
+}
+
+.skills-terminal-block {
+  border-left: 2px solid var(--green-main);
+}
+
+.skills-filter-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(0, 255, 136, 0.15);
+  padding-bottom: 0.8rem;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.skills-filter-btns-group {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.skills-filter-tab {
+  font-size: 0.75rem;
+  padding: 0.35rem 0.7rem;
+  cursor: pointer;
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.skill-card {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  border-radius: 6px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.skill-card.selected {
+  background: rgba(0, 255, 136, 0.12);
+  border-color: var(--green-main);
+  box-shadow: 0 0 12px rgba(0, 255, 136, 0.2);
+}
+
+.skills-card-top-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.skills-card-icon-wrap {
+  font-size: 1.2rem;
+}
+
+.skills-card-percent {
+  font-size: 0.8rem;
+  font-family: monospace;
+}
+
+.skills-card-name {
+  color: var(--text-main);
+  font-size: 0.95rem;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+
+.skills-progress-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  margin-top: 0.8rem;
+  margin-bottom: 0.2rem;
+}
+
+.skills-progress-fill,
+.skill-fill {
+  height: 100%;
+  background: linear-gradient(90deg, rgba(0, 255, 136, 0.5), var(--green-main));
+  box-shadow: 0 0 10px var(--green-main);
+  border-radius: 2px;
+  position: relative;
+  transition: width 0.4s ease;
+}
+
+/* Scanning Light Effect */
+.skills-progress-fill::after,
+.skill-fill::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: loadScan 2s infinite linear;
+}
+
+@keyframes loadScan {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.skills-details-box {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 1.4rem;
+  border-radius: 6px;
+  border: 1px dashed rgba(0, 255, 136, 0.4);
+  font-family: monospace;
+}
+
+.skills-details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(0, 255, 136, 0.15);
+  padding-bottom: 0.5rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.skills-details-title {
+  color: var(--green-main);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.skills-details-mastery {
+  color: var(--text-main);
+  font-size: 0.85rem;
+}
+
+.skills-details-desc {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.terminal-footer-info {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 255, 136, 0.15);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+
+/* ==========================================
+   8. PROJECTS COMPONENT SPECIFICATION
+   ========================================== */
+.projects-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.projects-title {
+  color: var(--text-main);
+  font-size: 1.6rem;
+  margin-top: 0.3rem;
+}
+
+.projects-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.projects-keyboard-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 8px;
+}
+
+.projects-tab-btn {
+  font-size: 0.8rem;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+}
+
+.projects-terminal-block {
+  border-left: 2px solid var(--green-main);
+}
+
+.projects-buffer-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(0, 255, 136, 0.15);
+  padding-bottom: 0.8rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.projects-table-header {
+  display: grid;
+  grid-template-columns: 1.2fr 2fr 1fr 1fr;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-family: monospace;
+  font-weight: bold;
+}
+
+.projects-table-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+}
+
+.projects-row-item {
+  display: grid;
+  grid-template-columns: 1.2fr 2fr 1fr 1fr;
+  align-items: center;
+  padding: 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+.projects-row-item.selected {
+  background: rgba(0, 255, 136, 0.12);
+  border: 1px solid var(--green-main);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.15);
+}
+
+.projects-row-item.unselected {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 255, 136, 0.05);
+}
+
+.projects-row-perms {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.projects-row-name {
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.projects-row-stack {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.projects-row-status {
+  color: var(--green-main);
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.projects-status-dot {
+  height: 7px;
+  width: 7px;
+  min-width: 7px;
+  min-height: 7px;
+  background-color: var(--green-main);
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 6px var(--green-main);
+  flex-shrink: 0;
+}
+
+.projects-readme-box {
+  margin-top: 1.5rem;
+  padding: 1.2rem;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 6px;
+  border: 1px dashed rgba(0, 255, 136, 0.4);
+}
+
+.projects-readme-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.projects-readme-cmd {
+  color: var(--green-main);
+  font-size: 0.85rem;
+  font-family: monospace;
+}
+
+.projects-action-links {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.projects-action-btn {
+  font-size: 0.8rem;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0.3rem 0.7rem;
+}
+
+.projects-readme-desc {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1.2rem;
+}
+
+.projects-deps-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.projects-dep-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-right: 4px;
+}
+
+.projects-dep-badge {
+  font-size: 0.75rem;
+  background: rgba(0, 255, 136, 0.1);
+  color: var(--green-main);
+  padding: 2px 8px;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  font-family: monospace;
+}
+
+.projects-grid-card {
+  border-left: 2px solid var(--green-main);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.projects-grid-title {
+  font-size: 1.15rem;
+  margin-bottom: 0.5rem;
+}
+
+.projects-grid-desc {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 1.2rem;
+  line-height: 1.5;
+}
+
+.projects-grid-tech-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 1rem;
+}
+
+.projects-grid-tech-badge {
+  font-size: 0.72rem;
+  background: rgba(0, 255, 136, 0.08);
+  color: var(--green-main);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.projects-grid-btn {
+  font-size: 0.75rem;
+  padding: 0.3rem 0.6rem;
+  text-decoration: none;
+}
+
+
+/* ==========================================
+   9. EXPERIENCE & EDUCATION LOG COMPONENT SPECIFICATION
+   ========================================== */
+.exp-header-wrap {
+  margin-bottom: 1.5rem;
+}
+
+.exp-title {
+  color: var(--text-main);
+  font-size: 1.6rem;
+  margin-top: 0.3rem;
+}
+
+.exp-controls-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.exp-tabs-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.exp-tab-btn {
+  font-size: 0.8rem;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+}
+
+.exp-modal-btn {
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.exp-terminal-block {
+  border-left: 2px solid var(--green-main);
+  position: relative;
+}
+
+.exp-session-bar {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  border-bottom: 1px solid rgba(0, 255, 136, 0.15);
+  padding-bottom: 0.8rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.exp-logs-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.exp-log-card {
+  padding: 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.exp-log-card.selected {
+  background: rgba(0, 255, 136, 0.12);
+  border: 1px solid var(--green-main);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.15);
+}
+
+.exp-log-card.unselected {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(0, 255, 136, 0.12);
+}
+
+.exp-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.exp-card-process {
+  color: var(--green-main);
+  font-size: 0.85rem;
+  font-family: monospace;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.exp-card-year {
+  background: rgba(0, 255, 136, 0.08);
+  color: var(--green-main);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  border: 1px solid rgba(0, 255, 136, 0.25);
+  font-family: monospace;
+}
+
+.exp-card-title {
+  color: var(--text-main);
+  font-size: 1.15rem;
+  margin-bottom: 0.3rem;
+  font-weight: bold;
+}
+
+.exp-card-location {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.8rem;
+  font-weight: normal;
+}
+
+.exp-card-details {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.8rem 1rem;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.exp-footer-hint {
+  margin-top: 1.5rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid rgba(0, 255, 136, 0.1);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Git Log Timeline Nodes */
+.git-node {
+  position: absolute;
+  left: -7px;
+  top: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--bg-color);
+  border: 2px solid var(--green-main);
+  box-shadow: 0 0 8px var(--green-main);
+}
+
+
+/* ==========================================
+   10. CONTACT FORM COMPONENT SPECIFICATION
+   ========================================== */
+.contact-block {
+  border-left: 2px solid var(--green-main);
+}
+
+.contact-title {
+  color: var(--text-main);
+  margin-bottom: 1.5rem;
+  font-weight: normal;
+}
+
+.contact-info-list {
+  margin-bottom: 2.5rem;
+  color: var(--text-muted);
+}
+
+.contact-link {
+  text-decoration: none;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.contact-label {
+  color: var(--green-main);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.terminal-input, 
+.terminal-textarea {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  border-radius: 4px;
+  padding: 0.6rem;
+  color: var(--text-main);
+  font-family: monospace;
+  outline: none;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+
+.terminal-textarea {
+  resize: vertical;
+}
+
+.contact-status-text {
+  margin-top: 0.5rem;
+  font-family: monospace;
+}
+
+.contact-submit-btn {
+  font-family: monospace;
+}
+
+
+/* ==========================================
+   11. CERTIFICATES MODAL COMPONENT SPECIFICATION
+   ========================================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(5, 8, 15, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-terminal-box {
+  width: 100%;
+  max-width: 650px;
+  max-height: 85vh;
+  overflow-y: auto;
+  border-left: 2px solid var(--green-main);
+  position: relative;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+  padding-bottom: 0.8rem;
+}
+
+.modal-close-icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--green-main);
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.modal-cert-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.modal-cert-item {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.modal-cert-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.modal-cert-title {
+  color: var(--text-main);
+  font-size: 1.05rem;
+  margin-bottom: 0.3rem;
+}
+
+.modal-cert-info {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.modal-cert-link-btn {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+.modal-footer {
+  margin-top: 2rem;
+  text-align: right;
+}
+
+.modal-close-action-btn {
+  padding: 0.5rem 1.2rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+
+/* ==========================================
+   12. FOOTER COMPONENT SPECIFICATION
+   ========================================== */
+.footer-container {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid rgba(0, 255, 136, 0.1);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-top: 4rem;
+}
+
+.footer-author-text {
+  margin-top: 1rem;
+}
+
+.footer-copyright-text {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+
+/* ==========================================
+   13. MATRIX BACKGROUND CANVAS COMPONENT
+   ========================================== */
+.matrix-canvas-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+
+
+/* ==========================================
+   14. FIXED PARTITIONED RESPONSIVE STRUCTURE
+   ========================================== */
+
+/* ------------------------------------------
+   A. MOBILE & TABLETS (Everything below 1024px uses Hamburger)
+   ------------------------------------------ */
+@media (max-width: 1024px) {
+  body, html {
+    width: 100% !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Hamburger Navbar Layout */
+  .navbar {
+    padding: 0.8rem 1.2rem !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .nav-brand {
+    font-size: 0.9rem !important;
+  }
+
+  .nav-hamburger-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: rgba(5, 8, 15, 0.98);
+    backdrop-filter: blur(12px);
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .nav-links.open {
+    max-height: 380px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .nav-links a {
+    font-size: 0.9rem;
+    width: 100%;
+    text-align: center;
+    padding: 0.4rem 0;
+  }
+
+  /* Terminal Container Scaling for Mobile/Tablets */
+  .terminal-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 5.5rem 0.8rem 2rem 0.8rem !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+  }
+  
+  .terminal-block {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 2rem 0.8rem 1.2rem 1rem !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+  }
+
+  /* Fluid Title Scale to prevent text clipping */
+  .home-title {
+    font-size: clamp(1rem, 4.5vw, 1.8rem) !important;
+    width: 100% !important;
+    white-space: nowrap !important;
+    letter-spacing: -0.5px !important;
+  }
+
+  .home-role-container {
+    font-size: clamp(0.8rem, 3.5vw, 1.1rem) !important;
+  }
+
+  /* Single-column grid layouts for smaller screens */
+  .card-grid,
+  .skills-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* ------------------------------------------
+   B. STANDARD DESKTOPS (1025px to 1200px)
+   ------------------------------------------ */
+@media (min-width: 1025px) and (max-width: 1200px) {
+  .navbar {
+    padding: 1.4rem 2.5rem !important;
+  }
+
+  .nav-hamburger-btn {
+    display: none !important;
+  }
+
+  .terminal-container {
+    max-width: 960px !important;
+    padding: 7rem 1.8rem 3.8rem 1.8rem !important;
+  }
+
+  .home-title {
+    font-size: 2.4rem !important;
+  }
+
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+  }
+
+  .skills-grid {
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)) !important;
+  }
+}
+
+
+/* ------------------------------------------
+   C. WIDESCREEN MACBOOKS & DESKTOPS (1201px and up)
+   ------------------------------------------ */
+@media (min-width: 1201px) {
+  .navbar {
+    padding: 1.5rem 3rem !important;
+  }
+
+  .nav-hamburger-btn {
+    display: none !important;
+  }
+
+  .terminal-container {
+    max-width: 1000px !important;
+    padding: 7rem 2rem 4rem 2rem !important;
+  }
+
+  .home-title {
+    font-size: 2.8rem !important;
+  }
+
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+  }
+
+  .skills-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important;
+  }
+  
+  
+}
+/* ==========================================
+   TWO-PART NAME FIX FOR SCREENS BELOW 460px
+   ========================================== */
+@media (max-width: 460px) {
+  .home-title {
+    font-size: 1.5rem !important;
+    line-height: 1.3 !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+
+  /* Forces the second half of your name onto a clean second line */
+  .home-title .name-break::after {
+    content: "\A";
+    white-space: pre;
+  }
+}
+
