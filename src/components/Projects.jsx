@@ -7,46 +7,56 @@ const Projects = () => {
   const [selectedRepo, setSelectedRepo] = useState(projectsData[0] || null);
   const [viewMode, setViewMode] = useState('table'); // 'table' or 'grid'
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
 
- 
+  // Single event listener driven by Navbar
   useEffect(() => {
-    if (viewMode !== 'table') return;
-
-    const handleKeyDown = (e) => {
-      if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
-        return;
-      }
-
-      if (e.key === 'ArrowDown' || e.key.toLowerCase() === 'j') {
-        e.preventDefault();
+    const handleNextSlide = (e) => {
+      if (e.detail?.sectionId === 'projects') {
         setSelectedIndex((prev) => {
-          const next = (prev + 1) % projectsData.length;
-          setSelectedRepo(projectsData[next]);
-          return next;
-        });
-      } else if (e.key === 'ArrowUp' || e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        setSelectedIndex((prev) => {
-          const next = (prev - 1 + projectsData.length) % projectsData.length;
+          const next = Math.min(prev + 1, projectsData.length - 1);
           setSelectedRepo(projectsData[next]);
           return next;
         });
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [viewMode]);
+    const handlePrevSlide = (e) => {
+      if (e.detail?.sectionId === 'projects') {
+        setSelectedIndex((prev) => {
+          const next = Math.max(prev - 1, 0);
+          setSelectedRepo(projectsData[next]);
+          return next;
+        });
+      }
+    };
+
+    window.addEventListener('nav-next-slide', handleNextSlide);
+    window.addEventListener('nav-prev-slide', handlePrevSlide);
+
+    return () => {
+      window.removeEventListener('nav-next-slide', handleNextSlide);
+      window.removeEventListener('nav-prev-slide', handlePrevSlide);
+    };
+  }, []);
+
+  // Determine active project: hover overrides clicked/keyboard selection
+  const activeRepo = hoveredIndex !== null ? projectsData[hoveredIndex] : selectedRepo;
 
   return (
-    <section className="terminal-container" id="projects">
+    <section 
+      className="terminal-container" 
+      id="projects"
+      data-interactive-section="true"
+      data-current-index={selectedIndex}
+      data-max-index={Math.max(0, projectsData.length - 1)}
+    >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
       >
-       
         <div className="projects-header-flex">
           <div>
             <p className="prompt" style={{ margin: 0 }}>cd /var/www/repositories && ls -la</p>
@@ -74,10 +84,8 @@ const Projects = () => {
           </div>
         </div>
 
-        
         {viewMode === 'table' ? (
           <div className="terminal-block projects-terminal-block">
-            
             <div className="projects-buffer-bar">
               <span>ACTIVE_BUFFER: <strong style={{ color: 'var(--green-main)' }}>REPOSITORIES_VIEW</strong></span>
               <span style={{ color: 'var(--green-main)', fontFamily: 'monospace' }}>MODE: TABLE_VIEW</span>
@@ -90,9 +98,12 @@ const Projects = () => {
               <span>STATUS</span>
             </div>
 
-            <div className="projects-table-rows">
+            <div 
+              className="projects-table-rows"
+              onMouseLeave={() => setHoveredIndex(null)}
+            >
               {projectsData.map((project, idx) => {
-                const isSelected = selectedRepo?.id === project.id;
+                const isSelected = activeRepo?.id === project.id;
                 return (
                   <div 
                     key={project.id}
@@ -100,6 +111,7 @@ const Projects = () => {
                       setSelectedRepo(project);
                       setSelectedIndex(idx);
                     }}
+                    onMouseEnter={() => setHoveredIndex(idx)}
                     className={`projects-row-item ${isSelected ? 'selected' : 'unselected'}`}
                   >
                     <span className="projects-row-perms">drwxr-xr-x</span>
@@ -117,9 +129,9 @@ const Projects = () => {
               })}
             </div>
 
-            {selectedRepo && (
+            {activeRepo && (
               <motion.div 
-                key={selectedRepo.id}
+                key={activeRepo.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.25 }}
@@ -127,16 +139,16 @@ const Projects = () => {
               >
                 <div className="projects-readme-header">
                   <span className="projects-readme-cmd">
-                    {">"} executing: cat ./&lt;{selectedRepo.repoName}&gt;/README.md
+                    {">"} executing: cat ./&lt;{activeRepo.repoName}&gt;/README.md
                   </span>
                   <div className="projects-action-links">
-                    {selectedRepo.github && (
-                      <a href={selectedRepo.github} target="_blank" rel="noreferrer" className="glow-text btn-terminal projects-action-btn" style={{ color: 'var(--text-main)' }}>
+                    {activeRepo.github && (
+                      <a href={activeRepo.github} target="_blank" rel="noreferrer" className="glow-text btn-terminal projects-action-btn" style={{ color: 'var(--text-main)' }}>
                         <FaGithub /> [ Source Code ]
                       </a>
                     )}
-                    {selectedRepo.live && selectedRepo.live !== "#" && (
-                      <a href={selectedRepo.live} target="_blank" rel="noreferrer" className="btn-terminal projects-action-btn" style={{ color: 'var(--green-main)' }}>
+                    {activeRepo.live && activeRepo.live !== "#" && (
+                      <a href={activeRepo.live} target="_blank" rel="noreferrer" className="btn-terminal projects-action-btn" style={{ color: 'var(--green-main)' }}>
                         <FaExternalLinkAlt /> [ Live Demo ]
                       </a>
                     )}
@@ -144,12 +156,12 @@ const Projects = () => {
                 </div>
 
                 <p className="projects-readme-desc">
-                  {selectedRepo.description}
+                  {activeRepo.description}
                 </p>
 
                 <div className="projects-deps-row">
                   <span className="projects-dep-label">DEPENDENCIES:</span>
-                  {selectedRepo.tech.map((t, idx) => (
+                  {activeRepo.tech.map((t, idx) => (
                     <span key={idx} className="projects-dep-badge">
                       {t}
                     </span>

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { skillsData } from '../data/portfolioData';
 import { FaJava, FaReact, FaGitAlt, FaCode, FaMicrochip, FaSearch } from 'react-icons/fa';
-import { SiSpringboot, SiMysql, SiJavascript, SiMongodb } from 'react-icons/si';
+import { SiSpringboot, SiMysql, SiMongodb } from 'react-icons/si';
+import { IoLogoJavascript } from 'react-icons/io5';
 
 const Skills = () => {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -12,29 +13,33 @@ const Skills = () => {
 
   const getSkillIcon = (skillName) => {
     const name = skillName.toLowerCase();
-    if (name.includes('java')) return <FaJava style={{ color: '#f89820' }} />;
-    if (name.includes('spring')) return <SiSpringboot style={{ color: '#6db33f' }} />;
-    if (name.includes('react')) return <FaReact style={{ color: '#61dafb' }} />;
-    if (name.includes('sql') || name.includes('mysql')) return <SiMysql style={{ color: '#00758f' }} />;
-    if (name.includes('mongo')) return <SiMongodb style={{ color: '#47a248' }} />;
-    if (name.includes('git')) return <FaGitAlt style={{ color: '#f05032' }} />;
-    if (name.includes('javascript') || name.includes('js')) return <SiJavascript style={{ color: '#f7df1e' }} />;
-    return <FaCode style={{ color: 'var(--green-main)' }} />;
+    if (name.includes('java') && !name.includes('script') && !name.includes('js')) {
+      return <FaJava className="skill-icon-java" />;
+    }
+    if (name.includes('spring')) return <SiSpringboot className="skill-icon-spring" />;
+    if (name.includes('react')) return <FaReact className="skill-icon-react" />;
+    if (name.includes('sql') || name.includes('mysql')) return <SiMysql className="skill-icon-mysql" />;
+    if (name.includes('mongo')) return <SiMongodb className="skill-icon-mongo" />;
+    if (name.includes('git')) return <FaGitAlt className="skill-icon-git" />;
+    if (name.includes('javascript') || name.includes('js')) {
+      return <IoLogoJavascript className="skill-icon-js" />;
+    }
+    return <FaCode className="skill-icon-default" />;
   };
 
   const skillDetails = {
-    "Java": "Core language for scalable backend systems, robust OOP design patterns, and JVM performance optimization.",
-    "Spring Boot": "Microservices architecture, RESTful API development, dependency injection, and enterprise security configurations.",
-    "Microservices": "Distributed systems design, service discovery, fault tolerance, and inter-service communication.",
-    "React.js": "Interactive modern UI development, component state management, hooks, and virtual DOM performance.",
-    "JavaScript": "Asynchronous programming, ES6+ features, event loops, and full-stack integration.",
-    "HTML / CSS": "Semantic markup, responsive layouts, flexbox, CSS grid, and custom dark-theme variables.",
-    "MySQL": "Relational database design, complex indexing, ACID compliance, and query performance tuning.",
-    "SQL": "Advanced data retrieval, joins, aggregations, and stored procedures.",
-    "MongoDB": "NoSQL document storage, flexible schemas, aggregation pipelines, and high-throughput data operations.",
-    "Git / GitHub": "Version control workflows, branching strategies, collaborative code reviews, and CI/CD pipelines.",
-    "Maven": "Dependency management, build automation lifecycle, and multi-module project configuration.",
-    "Postman": "API testing, automated endpoint validation, environment variables collection, and payload debugging."
+    "Java": "Core language for enterprise-grade backend systems, featuring robust object-oriented programming (OOP) design patterns, multithreading capabilities, and JVM performance optimization for high-throughput applications.",
+    "Spring Boot": "Microservices architecture development, enterprise RESTful API creation, dependency injection lifecycle management, and secure production-ready configurations with Spring Security.",
+    "Microservices": "Distributed systems design, service discovery, fault tolerance, API gateway routing, and resilient inter-service communication protocols.",
+    "React.js": "Modern interactive user interface development, custom hooks, efficient state management architecture, and virtual DOM rendering performance optimization.",
+    "JavaScript": "Asynchronous event-driven programming, ES6+ advanced features, event loop execution model, and seamless full-stack client-server integration.",
+    "HTML / CSS": "Semantic markup architecture, mobile-first responsive layouts, flexible box models, CSS grid systems, and scalable dark-theme design variables.",
+    "MySQL": "Relational database schema engineering, complex indexing strategies, ACID transaction compliance, and high-performance query optimization.",
+    "SQL": "Advanced data retrieval techniques, multi-table joins, analytical aggregations, views, and procedural query execution.",
+    "MongoDB": "NoSQL document storage design, flexible JSON-like schemas, aggregation pipeline processing, and high-throughput data operations.",
+    "Git / GitHub": "Version control workflows, trunk-based branching strategies, collaborative peer code reviews, conflict resolution, and automated CI/CD deployment pipelines.",
+    "Maven": "Dependency lifecycle management, build automation lifecycles, project object model (POM) configuration, and multi-module project structuring.",
+    "Postman": "Comprehensive API testing protocols, automated endpoint validation suites, environment variable collections, and detailed payload debugging."
   };
 
   const getFilteredSkills = () => {
@@ -86,28 +91,37 @@ const Skills = () => {
     };
   }, []);
 
-  
+  // Single event listener driven by Navbar
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
-        return;
-      }
-
-      if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key.toLowerCase() === 'j') {
-        e.preventDefault();
-        setSelectedIndex((prev) => (prev + 1) % currentSkills.length);
-      } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        setSelectedIndex((prev) => (prev - 1 + currentSkills.length) % currentSkills.length);
+    const handleNextSlide = (e) => {
+      if (e.detail?.sectionId === 'skills') {
+        setSelectedIndex((prev) => Math.min(prev + 1, currentSkills.length - 1));
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    const handlePrevSlide = (e) => {
+      if (e.detail?.sectionId === 'skills') {
+        setSelectedIndex((prev) => Math.max(prev - 1, 0));
+      }
+    };
+
+    window.addEventListener('nav-next-slide', handleNextSlide);
+    window.addEventListener('nav-prev-slide', handlePrevSlide);
+
+    return () => {
+      window.removeEventListener('nav-next-slide', handleNextSlide);
+      window.removeEventListener('nav-prev-slide', handlePrevSlide);
+    };
   }, [currentSkills.length]);
 
   return (
-    <section className="terminal-container" id="skills">
+    <section 
+      className="terminal-container" 
+      id="skills"
+      data-interactive-section="true"
+      data-current-index={selectedIndex}
+      data-max-index={Math.max(0, currentSkills.length - 1)}
+    >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -116,15 +130,19 @@ const Skills = () => {
       >
         <div className="terminal-header-flex">
           <div>
-            <p className="prompt" style={{ margin: 0 }}>matrix_grid --load-telemetry</p>
-            <h2 style={{ color: 'var(--text-main)', fontSize: '1.6rem', marginTop: '0.3rem' }}>
+            <p className="prompt skills-section-prompt">matrix_grid --load-telemetry</p>
+            <h2 className="skills-section-heading">
               Technical Competency Matrix
             </h2>
           </div>
 
-          <div className="skills-search-box">
-            <FaSearch style={{ color: 'var(--green-main)', fontSize: '0.8rem' }} />
+          <div 
+            className="skills-search-box" 
+            onClick={() => document.getElementById('skills-search-input-field')?.focus()}
+          >
+            <FaSearch className="skills-search-icon" />
             <input 
+              id="skills-search-input-field"
               type="text" 
               value={searchQuery}
               onChange={(e) => { setSearchQuery(e.target.value); setSelectedIndex(0); }}
@@ -144,7 +162,7 @@ const Skills = () => {
               <button onClick={() => { setActiveCategory('database'); setSelectedIndex(0); }} className={`terminal-tab-btn skills-filter-tab ${activeCategory === 'database' ? 'active' : ''}`}>[ Database ]</button>
               <button onClick={() => { setActiveCategory('tools'); setSelectedIndex(0); }} className={`terminal-tab-btn skills-filter-tab ${activeCategory === 'tools' ? 'active' : ''}`}>[ Tools ]</button>
             </div>
-            <span style={{ color: 'var(--green-main)', fontFamily: 'monospace', fontSize: '0.8rem' }}>USE [↑] / [↓] OR ARROWS</span>
+            <span className="skills-nav-instruction">USE [↑] / [↓] OR ARROWS</span>
           </div>
 
           <div className="skills-grid">
@@ -181,20 +199,20 @@ const Skills = () => {
               <span className="skills-details-title">
                 <FaMicrochip /> NODE_INSPECTOR // {activeSkill.name.toUpperCase()}
               </span>
-              <span className="skills-details-mastery">MASTERY: <strong style={{ color: 'var(--green-main)' }}>{animatedLevels[activeSkill.name] || 0}%</strong></span>
+              <span className="skills-details-mastery">MASTERY: <strong className="skills-mastery-highlight">{animatedLevels[activeSkill.name] || 0}%</strong></span>
             </div>
             
             <p className="skills-details-desc">
-              {">"} {skillDetails[activeSkill.name] || "Specialized engineering competency."}
+              {">"} {skillDetails[activeSkill.name] || "Specialized engineering competency configured for production environments."}
             </p>
           </div>
 
           <div className="terminal-footer-info">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div className="skills-footer-indicator-group">
               <span className="about-footer-dot"></span>
-              <span style={{ color: 'var(--green-main)' }}>Use Arrow Keys [↑] [↓] [←] [→] to navigate nodes.</span>
+              <span className="skills-footer-instruction-text">Use Arrow Keys [↑] [↓] [←] [→] to navigate nodes.</span>
             </div>
-            <span style={{ color: 'var(--text-muted)', fontFamily: 'monospace' }}>GRID_PROTOCOL: SECURE</span>
+            <span className="skills-footer-protocol-text">GRID_PROTOCOL: SECURE</span>
           </div>
 
         </div>

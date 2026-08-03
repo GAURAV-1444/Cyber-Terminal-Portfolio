@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { timelineData } from '../data/portfolioData';
 import CertificatesModal from './CertificatesModal';
-import { FaTerminal, FaCertificate } from 'react-icons/fa';
+import { FaTerminal, FaCertificate, FaMapMarkerAlt, FaCalendarAlt, FaChevronDown } from 'react-icons/fa';
 
 const Experience = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('all');
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
 
   const filteredData = timelineData.filter(item => {
     if (activeTab === 'all') return true;
@@ -17,30 +18,40 @@ const Experience = () => {
     return false;
   });
 
-  // Keyboard navigation support for experience logs (safeguarded against input focus)
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
-        return;
-      }
-
-      if (filteredData.length === 0) return;
-
-      if (e.key === 'ArrowDown' || e.key.toLowerCase() === 'j') {
-        e.preventDefault();
-        setSelectedIndex((prev) => (prev + 1) % filteredData.length);
-      } else if (e.key === 'ArrowUp' || e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        setSelectedIndex((prev) => (prev - 1 + filteredData.length) % filteredData.length);
+    const handleNextSlide = (e) => {
+      if (e.detail?.sectionId === 'experience') {
+        setSelectedIndex((prev) => Math.min(prev + 1, filteredData.length - 1));
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    const handlePrevSlide = (e) => {
+      if (e.detail?.sectionId === 'experience') {
+        setSelectedIndex((prev) => Math.max(prev - 1, 0));
+      }
+    };
+
+    window.addEventListener('nav-next-slide', handleNextSlide);
+    window.addEventListener('nav-prev-slide', handlePrevSlide);
+
+    return () => {
+      window.removeEventListener('nav-next-slide', handleNextSlide);
+      window.removeEventListener('nav-prev-slide', handlePrevSlide);
+    };
   }, [filteredData.length]);
 
+  const toggleSelect = (index) => {
+    setSelectedIndex((prev) => (prev === index ? null : index));
+  };
+
   return (
-    <section className="terminal-container" id="experience">
+    <section 
+      className="terminal-container" 
+      id="experience"
+      data-interactive-section="true"
+      data-current-index={selectedIndex ?? 0}
+      data-max-index={Math.max(0, filteredData.length - 1)}
+    >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -91,45 +102,72 @@ const Experience = () => {
         </div>
         
         <div className="terminal-block exp-terminal-block">
-          
           <div className="exp-session-bar">
             <span>SESSION_ID: #8492-LOG</span>
             <span style={{ color: 'var(--green-main)' }}>USE [J] / [K] OR ARROWS TO NAVIGATE</span>
           </div>
 
-          <div className="exp-logs-container">
+          <div 
+            className="exp-logs-container"
+            onMouseLeave={() => setHoveredIndex(null)}
+          >
             {filteredData.map((item, index) => {
-              const isSelected = selectedIndex === index;
+              // When hovering ANY item, override click/keyboard selection so only the hovered item expands
+              const isHoverActive = hoveredIndex !== null;
+              const isExpanded = isHoverActive ? hoveredIndex === index : selectedIndex === index;
+
               return (
                 <motion.div 
                   key={`${activeTab}-${index}`}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.25, delay: index * 0.05 }}
-                  onClick={() => setSelectedIndex(index)}
-                  whileHover={{ scale: 1.01 }}
-                  className={`exp-log-card ${isSelected ? 'selected' : 'unselected'}`}
+                  onClick={() => toggleSelect(index)}
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  className={`exp-log-card ${isExpanded ? 'selected' : 'unselected'}`}
                 >
-                  <div className="exp-card-header">
-                    <span className="exp-card-process">
-                      <FaTerminal style={{ fontSize: '0.75rem' }} /> {">"} process::{item.type}
-                    </span>
-                    <span className="exp-card-year">
-                      {item.year}
-                    </span>
+                  <div className="exp-card-header-row">
+                    {/* Left Side: Title and Location */}
+                    <div className="exp-card-main-info">
+                      <h3 className="exp-card-title">
+                        <FaTerminal style={{ fontSize: '0.75rem', marginRight: '6px' }} />
+                        {item.title}
+                      </h3>
+                      <h4 className="exp-card-location">
+                        <FaMapMarkerAlt className="exp-location-icon" />
+                        {item.location}
+                      </h4>
+                    </div>
+
+                    {/* Right Side: Year and Arrow */}
+                    <div className="exp-card-meta-right">
+                      <span className="exp-card-year">
+                        <FaCalendarAlt style={{ fontSize: '0.7rem', marginRight: '4px' }} />
+                        {item.year}
+                      </span>
+                      <FaChevronDown className={`exp-arrow-icon ${isExpanded ? 'rotated' : ''}`} />
+                    </div>
                   </div>
 
-                  <h3 className="exp-card-title">
-                    {item.title}
-                  </h3>
-                  
-                  <h4 className="exp-card-location">
-                    📍 {item.location}
-                  </h4>
-                  
-                  <p className="exp-card-details">
-                    {item.details}
-                  </p>
+                  {/* Expandable Details Box */}
+                  <AnimatePresence>
+                    {isExpanded && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.25, ease: 'easeInOut' }}
+                        className="exp-details-box"
+                      >
+                        <span className="exp-card-process">
+                          {">"} process::{item.type}
+                        </span>
+                        <p className="exp-card-details">
+                          {item.details}
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </motion.div>
               );
             })}

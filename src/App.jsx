@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Home from './components/Home';
-import SystemStatus from './components/SystemStatus'; // <--- Import new dashboard component
+import SystemStatus from './components/SystemStatus';
 import './index.css';
 import Projects from './components/Projects';
 import About from './components/About';
@@ -12,7 +12,14 @@ import Footer from './components/Footer';
 import MatrixBackground from './components/MatrixBackground';
 
 function App() {
-  React.useEffect(() => {
+  // Theme initialization on initial mount
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('portfolio-theme') || 'matrix';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  }, []);
+
+  // Scroll to top and clean hash on load
+  useEffect(() => {
     window.scrollTo(0, 0);
     if (window.location.hash) {
       window.history.replaceState(null, '', window.location.pathname);
