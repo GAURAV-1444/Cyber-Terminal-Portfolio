@@ -10,6 +10,7 @@ import Contact from './components/Contact';
 import Experience from './components/Experience';
 import Footer from './components/Footer';
 import MatrixBackground from './components/MatrixBackground';
+import { sfx } from './utils/sfx'; // Imported SFX utility
 
 function App() {
   // Theme initialization on initial mount
@@ -24,6 +25,37 @@ function App() {
     if (window.location.hash) {
       window.history.replaceState(null, '', window.location.pathname);
     }
+  }, []);
+
+  // Automatic Global Sound Effect Listener
+  useEffect(() => {
+    const handleGlobalClick = (e) => {
+      // Find closest clickable element
+      const target = e.target.closest(
+        'button, a, .btn-terminal, .terminal-tab-btn, .skill-tag, .tech-tag, .nav-brand-chip'
+      );
+
+      if (target) {
+        // Prevent double trigger on SFX toggle button itself
+        if (target.classList.contains('nav-sfx-toggle-btn')) {
+          return;
+        }
+
+        // Play execute sound for primary action buttons / brand chip
+        if (
+          target.classList.contains('btn-terminal') ||
+          target.classList.contains('nav-brand-chip')
+        ) {
+          sfx.playExecuteSound?.();
+        } else {
+          // Play standard key click for tabs, links, and tags
+          sfx.playKeyClick?.();
+        }
+      }
+    };
+
+    window.addEventListener('click', handleGlobalClick);
+    return () => window.removeEventListener('click', handleGlobalClick);
   }, []);
 
   return (

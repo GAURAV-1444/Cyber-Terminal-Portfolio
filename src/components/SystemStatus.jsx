@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { aboutData } from '../data/portfolioData';
+import './SystemStatus.css';
 
 const SystemStatus = () => {
   const [uptime, setUptime] = useState(0);

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { timelineData } from '../data/portfolioData';
 import CertificatesModal from './CertificatesModal';
 import { FaTerminal, FaCertificate, FaMapMarkerAlt, FaCalendarAlt, FaChevronDown } from 'react-icons/fa';
+import './Experience.css';
 
 const Experience = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { aboutData } from '../data/portfolioData';
+import './About.css';
 
 const About = () => {
   return (

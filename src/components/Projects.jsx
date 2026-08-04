@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { projectsData } from '../data/portfolioData';
 import { FaGithub, FaExternalLinkAlt, FaChevronRight, FaKeyboard } from 'react-icons/fa';
+import './Projects.css';
 
 const Projects = () => {
   const [selectedRepo, setSelectedRepo] = useState(projectsData[0] || null);

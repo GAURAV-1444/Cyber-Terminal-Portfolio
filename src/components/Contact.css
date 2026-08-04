@@ -1,0 +1,60 @@
+/* ==========================================
+   CONTACT FORM COMPONENT SPECIFICATION
+   ========================================== */
+.contact-block {
+  border-left: 2px solid var(--green-main);
+}
+
+.contact-title {
+  color: var(--text-main);
+  margin-bottom: 1.5rem;
+  font-weight: normal;
+}
+
+.contact-info-list {
+  margin-bottom: 2.5rem;
+  color: var(--text-muted);
+}
+
+.contact-link {
+  text-decoration: none;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.contact-label {
+  color: var(--green-main);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.terminal-input,
+.terminal-textarea {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--green-main);
+  border-radius: 4px;
+  padding: 0.6rem;
+  color: var(--text-main);
+  font-family: monospace;
+  outline: none;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+
+.terminal-textarea {
+  resize: vertical;
+}
+
+.contact-status-text {
+  margin-top: 0.5rem;
+  font-family: monospace;
+}
+
+.contact-submit-btn {
+  font-family: monospace;
+}

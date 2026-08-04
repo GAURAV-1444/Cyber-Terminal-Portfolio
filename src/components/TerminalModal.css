@@ -1,0 +1,228 @@
+/* ==========================================
+   TERMINAL MODAL COMPONENT SPECIFICATION
+   ========================================== */
+.terminal-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9990;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  font-family: monospace;
+}
+
+.terminal-modal-container {
+  width: 100%;
+  max-width: 720px;
+  background: rgba(5, 12, 8, 0.96);
+  border: 1px solid var(--green-main);
+  border-radius: 8px;
+  box-shadow: 0 0 30px var(--green-main), inset 0 0 15px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.terminal-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.85);
+  padding: 0.7rem 1.2rem;
+  border-bottom: 1px solid var(--green-main);
+  user-select: none;
+}
+
+.terminal-modal-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--green-main);
+  font-size: 0.85rem;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+.modal-terminal-icon {
+  font-size: 0.9rem;
+  color: var(--green-main);
+}
+
+.terminal-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.terminal-modal-action-btn,
+.terminal-modal-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.terminal-modal-action-btn:hover {
+  color: var(--green-main);
+  transform: rotate(90deg);
+}
+
+.terminal-modal-close-btn:hover {
+  color: #ff5f56;
+  transform: scale(1.1);
+}
+
+.terminal-modal-chips {
+  display: flex;
+  gap: 8px;
+  padding: 0.6rem 1.2rem;
+  background: rgba(0, 0, 0, 0.5);
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+
+.terminal-modal-chips::-webkit-scrollbar {
+  display: none;
+}
+
+.terminal-chip-btn {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--green-main);
+  color: var(--green-main);
+  font-family: monospace;
+  font-size: 0.78rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.terminal-chip-btn:hover {
+  background: var(--green-main);
+  color: #000;
+  box-shadow: 0 0 10px var(--green-main);
+  font-weight: bold;
+}
+
+.terminal-modal-body {
+  padding: 1.2rem;
+  min-height: 280px;
+  max-height: 400px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: text;
+  scrollbar-width: thin;
+  scrollbar-color: var(--green-main) transparent;
+}
+
+.terminal-modal-body::-webkit-scrollbar {
+  width: 5px;
+}
+
+.terminal-modal-body::-webkit-scrollbar-thumb {
+  background: var(--green-main);
+  border-radius: 4px;
+}
+
+.terminal-log-line {
+  font-size: 0.84rem;
+  line-height: 1.5;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.terminal-log-line.cmd {
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.terminal-log-line.info {
+  color: var(--text-muted);
+}
+
+.terminal-log-line.success {
+  color: var(--green-main);
+}
+
+.terminal-log-line.error {
+  color: #ff5f56;
+}
+
+.terminal-modal-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  padding-top: 4px;
+}
+
+.modal-prompt-symbol {
+  color: var(--green-main);
+  font-weight: bold;
+  font-size: 0.84rem;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.modal-cli-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-main);
+  font-family: monospace;
+  font-size: 0.84rem;
+  caret-color: var(--green-main);
+  width: 100%;
+}
+
+.modal-cli-input::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+  font-style: italic;
+}
+
+@media (max-width: 600px) {
+  .terminal-modal-overlay {
+    padding: 0.8rem;
+  }
+
+  .terminal-modal-container {
+    max-width: 100%;
+  }
+
+  .terminal-modal-body {
+    min-height: 240px;
+    max-height: 340px;
+    padding: 0.8rem;
+  }
+
+  .modal-prompt-symbol,
+  .modal-cli-input,
+  .terminal-log-line {
+    font-size: 0.78rem;
+  }
+
+  .terminal-chip-btn {
+    font-size: 0.72rem;
+    padding: 0.25rem 0.5rem;
+  }
+}

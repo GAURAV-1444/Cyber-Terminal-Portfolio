@@ -4,6 +4,7 @@ import { skillsData } from '../data/portfolioData';
 import { FaJava, FaReact, FaGitAlt, FaCode, FaMicrochip, FaSearch } from 'react-icons/fa';
 import { SiSpringboot, SiMysql, SiMongodb } from 'react-icons/si';
 import { IoLogoJavascript } from 'react-icons/io5';
+import './Skill.css';
 
 const Skills = () => {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -162,7 +163,7 @@ const Skills = () => {
               <button onClick={() => { setActiveCategory('database'); setSelectedIndex(0); }} className={`terminal-tab-btn skills-filter-tab ${activeCategory === 'database' ? 'active' : ''}`}>[ Database ]</button>
               <button onClick={() => { setActiveCategory('tools'); setSelectedIndex(0); }} className={`terminal-tab-btn skills-filter-tab ${activeCategory === 'tools' ? 'active' : ''}`}>[ Tools ]</button>
             </div>
-            <span className="skills-nav-instruction">USE [↑] / [↓] OR ARROWS</span>
+            <span className="skills-nav-instruction">USE [↑] / [↓] TO NAVIGATE</span>
           </div>
 
           <div className="skills-grid">

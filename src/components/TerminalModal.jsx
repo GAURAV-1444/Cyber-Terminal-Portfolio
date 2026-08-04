@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaTerminal, FaTimes, FaRedo } from 'react-icons/fa';
+import { sfx } from '../utils/sfx';
+import './TerminalModal.css';
 
 const COMMANDS_LIST = [
   'help', 'about', 'projects', 'skills', 'experience', 'contact', 'home',
@@ -67,6 +69,7 @@ const TerminalModal = ({ isOpen, onClose }) => {
   };
 
   const handleClear = () => {
+    sfx.playKeyClick();
     setLogs([
       { type: 'info', text: 'GauravOS Core Kernel [v4.2.0-STABLE]' },
       { type: 'info', text: 'Buffer reset successfully.' }
@@ -101,6 +104,7 @@ const TerminalModal = ({ isOpen, onClose }) => {
 
     // Handle exit / quit immediately without appending "exit" command to persistent logs
     if (['exit', 'quit'].includes(cmd)) {
+      sfx.playExecuteSound();
       setCmdInput('');
       setHistoryIndex(-1);
       onClose();
@@ -111,6 +115,7 @@ const TerminalModal = ({ isOpen, onClose }) => {
 
     // --- VIRTUAL FILE SYSTEM COMMANDS ---
     if (cmd === 'ls' || cmd === 'ls -a' || cmd === 'ls -l') {
+      sfx.playExecuteSound();
       newLogs.push({
         type: 'info',
         text: `DIRECTORY CONTENTS (./):\nbio.txt     stack.txt     skills.json     projects/     resume.pdf`
@@ -119,16 +124,19 @@ const TerminalModal = ({ isOpen, onClose }) => {
       const fileName = cmd.replace('cat ', '').trim();
 
       if (fileName === 'projects' || fileName === 'projects/') {
+        sfx.playErrorSound();
         newLogs.push({
           type: 'error',
           text: `cat: ${fileName}: Is a directory. Type 'projects' to navigate to the projects section.`
         });
       } else if (VIRTUAL_FILES[fileName]) {
+        sfx.playExecuteSound();
         newLogs.push({
           type: 'info',
           text: VIRTUAL_FILES[fileName]
         });
       } else {
+        sfx.playErrorSound();
         newLogs.push({
           type: 'error',
           text: `cat: ${fileName}: No such file or directory`
@@ -137,15 +145,17 @@ const TerminalModal = ({ isOpen, onClose }) => {
     }
     // --- RESUME & SOCIALS ---
     else if (['resume', 'cv'].includes(cmd)) {
+      sfx.playExecuteSound();
       window.open('/Gaurav_Kshirsagar_Resume.pdf', '_blank');
       newLogs.push({
         type: 'success',
         text: 'FETCHING_DOC: Opening Gaurav_Kshirsagar_Resume.pdf in a new window...'
       });
     } else if (['socials', 'links'].includes(cmd)) {
+      sfx.playExecuteSound();
       newLogs.push({
         type: 'info',
-        text: `CONNECT_NETWORKS:\n- GitHub:   https://github.com/GAURAV-1444\n- LinkedIn: https://www.linkedin.com/in/gaurav-kshirsagar-229087333/\n- Email:    mailto:gauravmanojkshirsagar333@gmail   .com`
+        text: `CONNECT_NETWORKS:\n- GitHub:   https://github.com/GAURAV-1444\n- LinkedIn: https://www.linkedin.com/in/gaurav-kshirsagar-229087333/\n- Email:    mailto:gauravmanojkshirsagar333@gmail.com`
       });
     }
     // --- THEME COMMAND ---
@@ -155,17 +165,20 @@ const TerminalModal = ({ isOpen, onClose }) => {
       const availableThemes = ['matrix', 'amber', 'cyan', 'crimson'];
 
       if (!themeArg) {
+        sfx.playExecuteSound();
         newLogs.push({
           type: 'info',
           text: `CURRENT THEME: [ ${currentTheme.toUpperCase()} ]\nAVAILABLE THEMES: ${availableThemes.join(' | ')}\nUSAGE: theme <name> (e.g., 'theme amber')`
         });
       } else if (availableThemes.includes(themeArg)) {
+        sfx.playExecuteSound();
         applyTheme(themeArg);
         newLogs.push({
           type: 'success',
           text: `SYSTEM THEME UPDATED: Switched accent palette to '${themeArg.toUpperCase()}'.`
         });
       } else {
+        sfx.playErrorSound();
         newLogs.push({
           type: 'error',
           text: `Unknown theme '${themeArg}'. Available themes: ${availableThemes.join(', ')}`
@@ -174,56 +187,69 @@ const TerminalModal = ({ isOpen, onClose }) => {
     }
     // --- NAVIGATION COMMANDS ---
     else if (['cd ~', 'cd root', 'cd home', 'home', 'top'].includes(cmd)) {
+      sfx.playExecuteSound();
       window.scrollTo({ top: 0, behavior: 'smooth' });
       newLogs.push({ type: 'success', text: 'Navigated to: ~ (Root/Home)' });
       handleCloseTerminal();
     } else if (['cd about', 'about'].includes(cmd)) {
+      sfx.playExecuteSound();
       document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
       newLogs.push({ type: 'success', text: 'Navigated to: #about' });
       handleCloseTerminal();
     } else if (['cd skills', 'skills'].includes(cmd)) {
+      sfx.playExecuteSound();
       document.getElementById('skills')?.scrollIntoView({ behavior: 'smooth' });
       newLogs.push({ type: 'success', text: 'Navigated to: #skills' });
       handleCloseTerminal();
     } else if (['cd projects', 'projects'].includes(cmd)) {
+      sfx.playExecuteSound();
       document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
       newLogs.push({ type: 'success', text: 'Navigated to: #projects' });
       handleCloseTerminal();
     } else if (['cd experience', 'experience', 'logs'].includes(cmd)) {
+      sfx.playExecuteSound();
       document.getElementById('experience')?.scrollIntoView({ behavior: 'smooth' });
       newLogs.push({ type: 'success', text: 'Navigated to: #experience' });
       handleCloseTerminal();
     } else if (['cd contact', 'contact'].includes(cmd)) {
+      sfx.playExecuteSound();
       document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
       newLogs.push({ type: 'success', text: 'Navigated to: #contact' });
       handleCloseTerminal();
     } 
     // --- SYSTEM UTILITIES ---
     else if (cmd === 'whoami') {
+      sfx.playExecuteSound();
       newLogs.push({ 
         type: 'info', 
         text: 'USER: Guest Visitor | ROLE: Reviewer / Engineer | PERMISSIONS: Read-Only Shell' 
       });
     } else if (cmd === 'neofetch') {
+      sfx.playExecuteSound();
       newLogs.push({
         type: 'info',
         text: `OS: GauravOS v4.2 x86_64\nHOST: Java Full Stack Portfolio\nKERNEL: Spring Boot & React.js\nTHEME: ${currentTheme.toUpperCase()}\nSHELL: ZSH Interactive CLI`
       });
     } else if (cmd === 'sudo') {
+      sfx.playErrorSound();
       newLogs.push({ type: 'error', text: 'Permission denied: Visitor is not in the sudoers file. This incident will be reported.' });
     } else if (cmd === 'matrix') {
+      sfx.playExecuteSound();
       newLogs.push({ type: 'success', text: 'Wake up, Neo... The Matrix has you. Follow the white rabbit.' });
     } else if (cmd === 'clear') {
+      sfx.playExecuteSound();
       setLogs([]);
       setCmdInput('');
       setHistoryIndex(-1);
       return;
     } else if (cmd === 'help') {
+      sfx.playExecuteSound();
       newLogs.push({ 
         type: 'info', 
         text: 'AVAILABLE COMMANDS:\n- Virtual FS: ls | cat <filename> (e.g., cat bio.txt, cat skills.json)\n- Navigation: about | skills | projects | experience | contact | home\n- Portfolio: resume | socials\n- System Info: whoami | neofetch | theme [matrix|amber|cyan|crimson]\n- Utilities: clear | exit ' 
       });
     } else {
+      sfx.playErrorSound();
       newLogs.push({ 
         type: 'error', 
         text: `zsh: command not found: '${cmd}'. Type 'help' for available system options.` 
@@ -236,6 +262,11 @@ const TerminalModal = ({ isOpen, onClose }) => {
     setCmdInput('');
   };
 
+  const handleInputChange = (e) => {
+    setCmdInput(e.target.value);
+    sfx.playKeyClick();
+  };
+
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       executeCommand(cmdInput);
@@ -244,13 +275,17 @@ const TerminalModal = ({ isOpen, onClose }) => {
     } else if (e.key === 'Tab') {
       e.preventDefault();
       const match = COMMANDS_LIST.find(c => c.startsWith(cmdInput.trim().toLowerCase()));
-      if (match) setCmdInput(match);
+      if (match) {
+        setCmdInput(match);
+        sfx.playKeyClick();
+      }
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       if (history.length === 0) return;
       const nextIdx = Math.min(historyIndex + 1, history.length - 1);
       setHistoryIndex(nextIdx);
       setCmdInput(history[nextIdx] || '');
+      sfx.playKeyClick();
     } else if (e.key === 'ArrowDown') {
       e.preventDefault();
       if (historyIndex <= 0) {
@@ -261,6 +296,7 @@ const TerminalModal = ({ isOpen, onClose }) => {
         setHistoryIndex(prevIdx);
         setCmdInput(history[prevIdx] || '');
       }
+      sfx.playKeyClick();
     }
   };
 
@@ -322,7 +358,7 @@ const TerminalModal = ({ isOpen, onClose }) => {
               ref={inputRef}
               type="text"
               value={cmdInput}
-              onChange={(e) => setCmdInput(e.target.value)}
+              onChange={handleInputChange}
               onKeyDown={handleKeyDown}
               placeholder="type 'ls', 'resume', 'theme amber' or 'help'..."
               className="modal-cli-input"

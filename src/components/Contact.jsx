@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import { aboutData } from '../data/portfolioData';
+import './Contact.css';
 
 const Contact = () => {
   const [formData, setFormData] = useState({

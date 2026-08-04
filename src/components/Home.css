@@ -1,0 +1,29 @@
+/* ==========================================
+   4. HOME COMPONENT SPECIFICATION
+   ========================================== */
+.home-title {
+  font-size: 2.8rem;
+  margin: 0.5rem 0;
+  letter-spacing: -1px;
+  color: var(--text-main);
+  text-shadow:
+    0 0 10px color-mix(in srgb, var(--green-main) 60%, transparent),
+    0 0 25px color-mix(in srgb, var(--green-main) 30%, transparent);
+  transition: text-shadow 0.3s ease;
+}
+
+.home-role-container {
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  margin-top: 1rem;
+}
+
+.home-resume-wrapper {
+  margin-top: 2.5rem;
+}
+
+.home-resume-btn {
+  display: inline-block;
+  text-decoration: none;
+}
+

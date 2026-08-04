@@ -1,0 +1,96 @@
+
+/* ==========================================
+   11. CERTIFICATES MODAL COMPONENT SPECIFICATION
+   ========================================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(5, 8, 15, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-terminal-box {
+  width: 100%;
+  max-width: 650px;
+  max-height: 85vh;
+  overflow-y: auto;
+  border-left: 2px solid var(--green-main);
+  position: relative;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.8rem;
+}
+
+.modal-close-icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--green-main);
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.modal-cert-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.modal-cert-item {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.modal-cert-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.modal-cert-title {
+  color: var(--text-main);
+  font-size: 1.05rem;
+  margin-bottom: 0.3rem;
+}
+
+.modal-cert-info {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.modal-cert-link-btn {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+.modal-footer {
+  margin-top: 2rem;
+  text-align: right;
+}
+
+.modal-close-action-btn {
+  padding: 0.5rem 1.2rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}

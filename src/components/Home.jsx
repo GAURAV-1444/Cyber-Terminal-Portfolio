@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import Typed from 'typed.js';
 import { motion } from 'framer-motion';
 import { aboutData } from '../data/portfolioData';
+import './Home.css';
 
 const Home = () => {
   const typedRef = useRef(null);

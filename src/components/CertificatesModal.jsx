@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { certificatesData } from '../data/portfolioData';
 import { FaExternalLinkAlt, FaTimes } from 'react-icons/fa';
+import './CertificatesModal.css';
 
 const CertificatesModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
