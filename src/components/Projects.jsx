@@ -89,87 +89,98 @@ const Projects = () => {
           <div className="terminal-block projects-terminal-block">
             <div className="projects-buffer-bar">
               <span>ACTIVE_BUFFER: <strong style={{ color: 'var(--green-main)' }}>REPOSITORIES_VIEW</strong></span>
-              <span style={{ color: 'var(--green-main)', fontFamily: 'monospace' }}>MODE: TABLE_VIEW</span>
+              <span style={{ color: 'var(--green-main)', fontFamily: 'monospace' }}>MODE: SPLIT_VIEW</span>
             </div>
 
-            <div className="projects-table-header">
-              <span>PERMISSIONS</span>
-              <span>PROJECT_NAME</span>
-              <span>STACK</span>
-              <span>STATUS</span>
-            </div>
+            {/* SPLIT LAYOUT WRAPPER */}
+            <div className="projects-split-layout">
+              
+              {/* LEFT COLUMN: REPOSITORY LIST */}
+              <div className="projects-list-column">
+                <div className="projects-table-header">
+                  <span>PERMISSIONS</span>
+                  <span>PROJECT_NAME</span>
+                  <span>STACK</span>
+                  <span>STATUS</span>
+                </div>
 
-            <div 
-              className="projects-table-rows"
-              onMouseLeave={() => setHoveredIndex(null)}
-            >
-              {projectsData.map((project, idx) => {
-                const isSelected = activeRepo?.id === project.id;
-                return (
-                  <div 
-                    key={project.id}
-                    onClick={() => {
-                      setSelectedRepo(project);
-                      setSelectedIndex(idx);
-                    }}
-                    onMouseEnter={() => setHoveredIndex(idx)}
-                    className={`projects-row-item ${isSelected ? 'selected' : 'unselected'}`}
+                <div 
+                  className="projects-table-rows"
+                  onMouseLeave={() => setHoveredIndex(null)}
+                >
+                  {projectsData.map((project, idx) => {
+                    const isSelected = activeRepo?.id === project.id;
+                    return (
+                      <div 
+                        key={project.id}
+                        onClick={() => {
+                          setSelectedRepo(project);
+                          setSelectedIndex(idx);
+                        }}
+                        onMouseEnter={() => setHoveredIndex(idx)}
+                        className={`projects-row-item ${isSelected ? 'selected' : 'unselected'}`}
+                      >
+                        <span className="projects-row-perms">drwxr-xr-x</span>
+                        <span className="projects-row-name" style={{ color: isSelected ? 'var(--green-main)' : 'var(--text-main)' }}>
+                          <FaChevronRight style={{ fontSize: '0.7rem', opacity: isSelected ? 1 : 0.3, transform: isSelected ? 'translateX(2px)' : 'none' }} /> {project.repoName}
+                        </span>
+                        <span className="projects-row-stack">{project.tech?.[0] || 'Java'}</span>
+                        
+                        <span className="projects-row-status">
+                          <span className="projects-status-dot"></span> 
+                          <span>STABLE</span>
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* RIGHT COLUMN: STICKY README DETAIL PANEL */}
+              <div className="projects-details-column">
+                {activeRepo && (
+                  <motion.div 
+                    key={activeRepo.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="projects-readme-box"
                   >
-                    <span className="projects-row-perms">drwxr-xr-x</span>
-                    <span className="projects-row-name" style={{ color: isSelected ? 'var(--green-main)' : 'var(--text-main)' }}>
-                      <FaChevronRight style={{ fontSize: '0.7rem', opacity: isSelected ? 1 : 0.3, transform: isSelected ? 'translateX(2px)' : 'none' }} /> {project.repoName}
-                    </span>
-                    <span className="projects-row-stack">{project.tech?.[0] || 'Java'}</span>
-                    
-                    <span className="projects-row-status">
-                      <span className="projects-status-dot"></span> 
-                      <span>STABLE</span>
-                    </span>
-                  </div>
-                );
-              })}
+                    <div className="projects-readme-header">
+                      <span className="projects-readme-cmd">
+                        {">"} executing: cat ./&lt;{activeRepo.repoName}&gt;/README.md
+                      </span>
+                      <div className="projects-action-links">
+                        {activeRepo.github && (
+                          <a href={activeRepo.github} target="_blank" rel="noreferrer" className="glow-text btn-terminal projects-action-btn" style={{ color: 'var(--text-main)' }}>
+                            <FaGithub /> [ Source Code ]
+                          </a>
+                        )}
+                        {activeRepo.live && activeRepo.live !== "#" && (
+                          <a href={activeRepo.live} target="_blank" rel="noreferrer" className="btn-terminal projects-action-btn" style={{ color: 'var(--green-main)' }}>
+                            <FaExternalLinkAlt /> [ Live Demo ]
+                          </a>
+                        )}
+                      </div>
+                    </div>
+
+                    <p className="projects-readme-desc">
+                      {activeRepo.description}
+                    </p>
+
+                    <div className="projects-deps-row">
+                      <span className="projects-dep-label">DEPENDENCIES:</span>
+                      {activeRepo.tech.map((t, idx) => (
+                        <span key={idx} className="projects-dep-badge">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </div>
+
             </div>
-
-            {activeRepo && (
-              <motion.div 
-                key={activeRepo.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.25 }}
-                className="projects-readme-box"
-              >
-                <div className="projects-readme-header">
-                  <span className="projects-readme-cmd">
-                    {">"} executing: cat ./&lt;{activeRepo.repoName}&gt;/README.md
-                  </span>
-                  <div className="projects-action-links">
-                    {activeRepo.github && (
-                      <a href={activeRepo.github} target="_blank" rel="noreferrer" className="glow-text btn-terminal projects-action-btn" style={{ color: 'var(--text-main)' }}>
-                        <FaGithub /> [ Source Code ]
-                      </a>
-                    )}
-                    {activeRepo.live && activeRepo.live !== "#" && (
-                      <a href={activeRepo.live} target="_blank" rel="noreferrer" className="btn-terminal projects-action-btn" style={{ color: 'var(--green-main)' }}>
-                        <FaExternalLinkAlt /> [ Live Demo ]
-                      </a>
-                    )}
-                  </div>
-                </div>
-
-                <p className="projects-readme-desc">
-                  {activeRepo.description}
-                </p>
-
-                <div className="projects-deps-row">
-                  <span className="projects-dep-label">DEPENDENCIES:</span>
-                  {activeRepo.tech.map((t, idx) => (
-                    <span key={idx} className="projects-dep-badge">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </motion.div>
-            )}
 
           </div>
         ) : (
