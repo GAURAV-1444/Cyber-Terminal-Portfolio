@@ -10,16 +10,17 @@ import Contact from './components/Contact';
 import Experience from './components/Experience';
 import Footer from './components/Footer';
 import MatrixBackground from './components/MatrixBackground';
-import { sfx } from './utils/sfx'; // Imported SFX utility
+import AIChatModal from './components/AIChatModal';
+import { sfx } from './utils/sfx';
 
 function App() {
-  // Theme initialization on initial mount
+
   useEffect(() => {
     const savedTheme = localStorage.getItem('portfolio-theme') || 'matrix';
     document.documentElement.setAttribute('data-theme', savedTheme);
   }, []);
 
-  // Scroll to top and clean hash on load
+  
   useEffect(() => {
     window.scrollTo(0, 0);
     if (window.location.hash) {
@@ -27,28 +28,28 @@ function App() {
     }
   }, []);
 
-  // Automatic Global Sound Effect Listener
+
   useEffect(() => {
     const handleGlobalClick = (e) => {
-      // Find closest clickable element
+      
       const target = e.target.closest(
         'button, a, .btn-terminal, .terminal-tab-btn, .skill-tag, .tech-tag, .nav-brand-chip'
       );
 
       if (target) {
-        // Prevent double trigger on SFX toggle button itself
+        
         if (target.classList.contains('nav-sfx-toggle-btn')) {
           return;
         }
 
-        // Play execute sound for primary action buttons / brand chip
+        
         if (
           target.classList.contains('btn-terminal') ||
           target.classList.contains('nav-brand-chip')
         ) {
           sfx.playExecuteSound?.();
         } else {
-          // Play standard key click for tabs, links, and tags
+          
           sfx.playKeyClick?.();
         }
       }
@@ -70,6 +71,7 @@ function App() {
       <Experience />
       <Contact />
       <Footer />
+      <AIChatModal />
     </div>
   );
 }

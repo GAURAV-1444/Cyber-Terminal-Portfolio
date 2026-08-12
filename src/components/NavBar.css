@@ -152,13 +152,14 @@
 }
 
 /* ==========================================
-   FLOATING ACTION BUTTON (BOTTOM-RIGHT SFX)
+   FLOATING ACTION BUTTON (BOTTOM-LEFT SFX)
    ========================================== */
 button.nav-sfx-toggle-btn {
   all: unset;
   position: fixed !important;
   bottom: 2rem !important;
-  right: 2rem !important;
+  left: 2rem !important; /* Moved to bottom-left */
+  right: auto !important;
   z-index: 2000 !important;
   width: 44px !important;
   height: 44px !important;
@@ -198,6 +199,16 @@ button.nav-sfx-toggle-btn:active {
   color: #ff2a5f !important;
   font-size: 1.1rem !important;
   filter: drop-shadow(0 0 6px #ff2a5f);
+}
+
+/* Mobile Responsiveness for SFX Button */
+@media (max-width: 768px) {
+  button.nav-sfx-toggle-btn {
+    bottom: 1.25rem !important;
+    left: 1.25rem !important;
+    width: 38px !important;
+    height: 38px !important;
+  }
 }
 
 /* ==========================================

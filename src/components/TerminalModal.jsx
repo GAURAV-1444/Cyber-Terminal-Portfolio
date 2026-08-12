@@ -5,7 +5,7 @@ import './TerminalModal.css';
 
 const COMMANDS_LIST = [
   'help', 'about', 'projects', 'skills', 'experience', 'contact', 'home',
-  'whoami', 'neofetch', 'clear', 'exit', 'matrix',
+  'whoami', 'neofetch', 'clear', 'exit', 'matrix', 'ai', 'chat', 'ask', 'bot',
   'theme', 'theme matrix', 'theme amber', 'theme cyan', 'theme crimson',
   'resume', 'cv', 'socials', 'links',
   'ls', 'cat bio.txt', 'cat stack.txt', 'cat skills.json', 'cat resume.pdf'
@@ -48,14 +48,14 @@ const TerminalModal = ({ isOpen, onClose }) => {
   const inputRef = useRef(null);
   const logEndRef = useRef(null);
 
-  // Focus input when opened
+  
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 100);
     }
   }, [isOpen]);
 
-  // Scroll to bottom when logs update
+  
   useEffect(() => {
     logEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [logs]);
@@ -102,7 +102,7 @@ const TerminalModal = ({ isOpen, onClose }) => {
     const cmd = rawCmd.trim().toLowerCase();
     if (!cmd) return;
 
-    // Handle exit / quit immediately without appending "exit" command to persistent logs
+   
     if (['exit', 'quit'].includes(cmd)) {
       sfx.playExecuteSound();
       setCmdInput('');
@@ -113,7 +113,19 @@ const TerminalModal = ({ isOpen, onClose }) => {
 
     const newLogs = [...logs, { type: 'cmd', text: `visitor@gaurav-dev:~$ ${rawCmd}` }];
 
-    // --- VIRTUAL FILE SYSTEM COMMANDS ---
+  
+    if (['ai', 'chat', 'ask', 'bot'].includes(cmd)) {
+      sfx.playExecuteSound();
+      window.dispatchEvent(new CustomEvent('toggle-ai-chat', { detail: { open: true } }));
+      newLogs.push({
+        type: 'success',
+        text: 'SYS_AI // Initializing Gemini neural core stream...'
+      });
+      handleCloseTerminal();
+      return;
+    }
+
+    
     if (cmd === 'ls' || cmd === 'ls -a' || cmd === 'ls -l') {
       sfx.playExecuteSound();
       newLogs.push({
@@ -143,7 +155,7 @@ const TerminalModal = ({ isOpen, onClose }) => {
         });
       }
     }
-    // --- RESUME & SOCIALS ---
+
     else if (['resume', 'cv'].includes(cmd)) {
       sfx.playExecuteSound();
       window.open('/Gaurav_Kshirsagar_Resume.pdf', '_blank');
@@ -158,7 +170,7 @@ const TerminalModal = ({ isOpen, onClose }) => {
         text: `CONNECT_NETWORKS:\n- GitHub:   https://github.com/GAURAV-1444\n- LinkedIn: https://www.linkedin.com/in/gaurav-kshirsagar-229087333/\n- Email:    mailto:gauravmanojkshirsagar333@gmail.com`
       });
     }
-    // --- THEME COMMAND ---
+    
     else if (cmd.startsWith('theme')) {
       const parts = cmd.split(' ');
       const themeArg = parts[1];
@@ -185,7 +197,7 @@ const TerminalModal = ({ isOpen, onClose }) => {
         });
       }
     }
-    // --- NAVIGATION COMMANDS ---
+    
     else if (['cd ~', 'cd root', 'cd home', 'home', 'top'].includes(cmd)) {
       sfx.playExecuteSound();
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -217,7 +229,7 @@ const TerminalModal = ({ isOpen, onClose }) => {
       newLogs.push({ type: 'success', text: 'Navigated to: #contact' });
       handleCloseTerminal();
     } 
-    // --- SYSTEM UTILITIES ---
+ 
     else if (cmd === 'whoami') {
       sfx.playExecuteSound();
       newLogs.push({ 
@@ -246,7 +258,7 @@ const TerminalModal = ({ isOpen, onClose }) => {
       sfx.playExecuteSound();
       newLogs.push({ 
         type: 'info', 
-        text: 'AVAILABLE COMMANDS:\n- Virtual FS: ls | cat <filename> (e.g., cat bio.txt, cat skills.json)\n- Navigation: about | skills | projects | experience | contact | home\n- Portfolio: resume | socials\n- System Info: whoami | neofetch | theme [matrix|amber|cyan|crimson]\n- Utilities: clear | exit ' 
+        text: 'AVAILABLE COMMANDS:\n- Virtual FS: ls | cat <filename> (e.g., cat bio.txt, cat skills.json)\n- Navigation: about | skills | projects | experience | contact | home\n- Portfolio: resume | socials | ai (Ask SYS_AI)\n- System Info: whoami | neofetch | theme [matrix|amber|cyan|crimson]\n- Utilities: clear | exit ' 
       });
     } else {
       sfx.playErrorSound();
@@ -304,7 +316,7 @@ const TerminalModal = ({ isOpen, onClose }) => {
     <div className="terminal-modal-overlay" onClick={handleCloseTerminal}>
       <div className="terminal-modal-container" onClick={(e) => e.stopPropagation()}>
         
-        {/* Header Bar */}
+      
         <div className="terminal-modal-header">
           <div className="terminal-modal-title">
             <FaTerminal className="modal-terminal-icon" />
@@ -328,9 +340,9 @@ const TerminalModal = ({ isOpen, onClose }) => {
           </div>
         </div>
 
-        {/* Quick Command Chips */}
+      
         <div className="terminal-modal-chips">
-          {['ls', 'cat bio.txt', 'projects', 'resume', 'socials', 'theme amber', 'theme cyan', 'help'].map((chip) => (
+          {['ai', 'ls', 'cat bio.txt', 'projects', 'resume', 'socials', 'theme amber', 'help'].map((chip) => (
             <button 
               key={chip} 
               className="terminal-chip-btn"
@@ -341,7 +353,7 @@ const TerminalModal = ({ isOpen, onClose }) => {
           ))}
         </div>
 
-        {/* Terminal Body Logs */}
+        
         <div className="terminal-modal-body" onClick={() => inputRef.current?.focus()}>
           {logs.map((log, index) => (
             <div key={index} className={`terminal-log-line ${log.type}`}>
@@ -351,7 +363,7 @@ const TerminalModal = ({ isOpen, onClose }) => {
             </div>
           ))}
 
-          {/* Active Input Line */}
+          
           <div className="terminal-modal-input-row">
             <span className="modal-prompt-symbol">visitor@gaurav-dev:~$</span>
             <input
@@ -360,7 +372,7 @@ const TerminalModal = ({ isOpen, onClose }) => {
               value={cmdInput}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
-              placeholder="type 'ls', 'resume', 'theme amber' or 'help'..."
+              placeholder="type 'ai', 'ls', 'resume', 'theme amber' or 'help'..."
               className="modal-cli-input"
             />
           </div>

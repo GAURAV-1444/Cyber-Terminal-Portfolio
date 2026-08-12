@@ -5,7 +5,7 @@ import './Footer.css';
 const FOOTER_COMMANDS = [
   'help', 'about', 'cd about', 'projects', 'cd projects',
   'skills', 'cd skills', 'experience', 'cd experience', 'contact', 'cd contact',
-  'home', 'cd home', 'top', 'cd ~', 'clear', 'exit'
+  'home', 'cd home', 'top', 'cd ~', 'clear', 'exit', 'ai', 'chat', 'ask', 'bot'
 ];
 
 const Footer = () => {
@@ -78,8 +78,13 @@ const Footer = () => {
 
     const cleanCmd = cmd.replace(/^cd\s+/, '');
 
+    // AI Assistant Command
+    if (['ai', 'chat', 'ask', 'bot'].includes(cmd)) {
+      window.dispatchEvent(new CustomEvent('toggle-ai-chat', { detail: { open: true } }));
+      showTemporaryFeedback('SYS_AI // Launching Interactive Gemini Assistant...');
+    }
     // Root / Home Commands
-    if (['~', 'root', 'top', 'home'].includes(cleanCmd) || ['cd ~', 'cd root', 'top', 'cd home', 'home'].includes(cmd)) {
+    else if (['~', 'root', 'top', 'home'].includes(cleanCmd) || ['cd ~', 'cd root', 'top', 'cd home', 'home'].includes(cmd)) {
       navigateToSection('home');
       showTemporaryFeedback('Navigated to: ~ (Root/Home)');
     } 
@@ -118,7 +123,7 @@ const Footer = () => {
     } 
     // Help & Utilities
     else if (cmd === 'help') {
-      showTemporaryFeedback('AVAILABLE COMMANDS: cd [about | skills | projects | experience | contact | ~] | top | clear | exit');
+      showTemporaryFeedback('AVAILABLE COMMANDS: ai | cd [about | skills | projects | experience | contact | ~] | top | clear | exit');
     } else if (cmd === 'clear') {
       setFeedbackMsg('');
     } else {
@@ -196,7 +201,7 @@ const Footer = () => {
                   value={cmdInput}
                   onChange={(e) => setCmdInput(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="type 'help', 'cd project', 'cd ~', or press 'Tab' to autocomplete..."
+                  placeholder="type 'ai', 'help', 'cd project', 'cd ~', or press 'Tab'..."
                   className="footer-cli-input"
                 />
                 <button 
