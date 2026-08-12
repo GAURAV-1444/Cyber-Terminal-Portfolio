@@ -37,27 +37,34 @@ export const skillsData = {
 export const projectsData = [
     {
         id: 1,
+        repoName: "User-Microservices",
+        tech: ["Java", "Spring Boot", "Spring Security", "REST API", "MySQL"],
+        description: "Decoupled backend microservices architecture designed for user management, user registration, authentication, role-based authorization, and persistent storage.",
+        github: "https://github.com/GAURAV-1444/User-Microservices",
+    },
+    {
+        id: 2,
         repoName: "FoodieHub",
         tech: ["Java", "Spring Boot", "REST API", "MySQL"],
         description: "Active development of a comprehensive food management backend. Implements layered architecture to handle users, restaurant menus, shopping carts, and order processing.",
         github: "https://github.com/GAURAV-1444/FoodieHub-Backend",
     },
     {
-        id: 2,
+        id: 3,
         repoName: "Inventory-Management-System",
         tech: ["Java", "Spring Boot", "Hibernate ORM", "REST API", "MySQL"],
         description: "Backend system for inventory management featuring RESTful APIs for CRUD operations with JSON-based request and response handling.",
         github: "https://github.com/GAURAV-1444/Inventory-Management-System-Hibernate-Spring-REST-API",
     },
     {
-        id: 3,
+        id: 4,
         repoName: "Employee-Management-System",
         tech: ["Java", "Spring MVC", "JSP", "MySQL"],
         description: "Web-based application utilizing Spring MVC architecture with full CRUD functionality and persistent data storage.",
         github: "https://github.com/GAURAV-1444/Employee-Management-System-SpringMVC",
     },
     {
-        id: 4,
+        id: 5,
         repoName: "Cyber_Terminal_Portfolio",
         tech: ["React.js", "CSS3", "JavaScript"],
         description: "An immersive, developer-focused cyberpunk terminal portfolio featuring live system diagnostics, responsive layouts, and interactive command-line components.",
